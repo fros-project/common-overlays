@@ -14,19 +14,15 @@
 
 #include "velDriver.hpp"
 #include <driver/gpio.h>
+#include "pinmap.hpp"
 
-int pwmPins[] = { GPIO_NUM_0, GPIO_NUM_0, GPIO_NUM_0, GPIO_NUM_0};// LIFT_PWM}; // LIFT_PWM, GRAB_PWM};
-int dirPins[] = { GPIO_NUM_0, GPIO_NUM_0, GPIO_NUM_0, GPIO_NUM_0};// LIFT_DIR}; // LIFT_DIR, GRAB_DIR};
+int pwmPins[] = { PWM_FL, PWM_FR, PWM_BL, PWM_BR};// LIFT_PWM}; // LIFT_PWM, GRAB_PWM};
+int dirPins[] = { DIR_FL, DIR_FR, DIR_BL, DIR_BR};;// LIFT_DIR}; // LIFT_DIR, GRAB_DIR};
 
 
-qmd* gen = new qmd(pwmPins, dirPins, 4);
 
 extern "C" void start();
 
 extern "C" void* overlay_main(){
-    gen->setInvertingMode(false);
-    gen->setRange(19900, 0);
-
-    velDriver* drv = new velDriver(gen);
-    return drv;
+    return new velDriver();
 }

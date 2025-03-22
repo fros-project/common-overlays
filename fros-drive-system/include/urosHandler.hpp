@@ -93,9 +93,10 @@ public:
      */
 
     // static methods to register a parameter, must be call before starting executor thread
-    static void addParameter_bool(char* name, bool* data, urosElement::config* context = 0);
-    static void addParameter_int(char* name, int64_t* data, urosElement::config* context = 0, int64_t min = 0, int64_t max = 0, int64_t stepSize = 0);
-    static void addParameter_double(char* name, double* data, urosElement::config* context = 0, double min = 0, double max = 0, double stepSize = 0);
+    // static methods to register a parameter, must be call before starting executor thread
+    static void addParameter_bool(char* name, bool* data, urosElement::config* context = 0, char* additional_constrains = nullptr);
+    static void addParameter_int(char* name, int64_t* data, urosElement::config* context = 0, char* additional_constrains = nullptr, int64_t min = 0, int64_t max = 0, int64_t stepSize = 0);
+    static void addParameter_double(char* name, double* data, urosElement::config* context = 0, char* additional_constrains = nullptr, double min = 0, double max = 0, double stepSize = 0);
 
 
 

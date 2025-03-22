@@ -12,6 +12,8 @@
 #include <urosElement.hpp>
 #include <geometry_msgs/msg/twist.h>
 
+#include "pinmap.hpp"
+
 /**
  * @brief wheelSpeed to represent normalized wheel speed
  */
@@ -35,12 +37,12 @@ public:
     struct config : public urosElement::config {
 
         config() : urosElement::config("vel_drv", sizeof(velDriver::config)) { load(); };
-        bool testParam =  true;
-        double testValueDouble = 10.0f;
-        int64_t testValue = 10;
+        int64_t driveType = 0;
+        int64_t pwms[4] = { PWM_FL, PWM_FR, PWM_BL, PWM_BR};
+        int64_t dirs[4] = { DIR_FL, DIR_FR, DIR_BL, DIR_BR};
     } cfg;
 
-    velDriver(qmd* drv);
+    velDriver();
 
     void declareParameters();
     void init();
@@ -53,6 +55,9 @@ public:
      * @param w normalized yaw
      * @return 
      */
+    static wheelSpeed holonomicMap(float x, float y, float w);
+    static wheelSpeed diffrentialMap(float x, float y, float w);
+    static wheelSpeed omniMap(float x, float y, float w);
     static wheelSpeed map(float x, float y, float w);
 
     static void cmdVelCallback(const void* msgIn);
