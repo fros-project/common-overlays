@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.8)
 project(fros-imu)
 
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
@@ -20,11 +23,17 @@ find_package(rcl_interfaces)
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
 
+# overlay for bno055
 add_executable(fros-imu-bno055 
     src/main-bno055.cpp 
-    src/imuPublisher.cpp)
+    src/imuPublisher.cpp
+    src/storable.cpp
+  
+    deps/BNO055_SensorAPI/bno055.c
 
-target_include_directories(fros-imu-bno055 PUBLIC include)
+)
+
+target_include_directories(fros-imu-bno055 PUBLIC include deps/BNO055_SensorAPI)
 target_link_libraries(fros-imu-bno055 fros std_msgs sensor_msgs geometry_msgs builtin_interfaces action_msgs unique_identifier_msgs rcl_interfaces)
 
 

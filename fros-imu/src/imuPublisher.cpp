@@ -15,9 +15,8 @@ const rosidl_message_type_support_t * mag_type_support = ROSIDL_GET_MSG_TYPE_SUP
 imuPublisher*  imuPublisher::defaultPub = 0;
 
 
-imuPublisher::imuPublisher(genericImu* hwImu) :hwi(hwImu) {
+imuPublisher::imuPublisher() {
     defaultPub = this;
-    hwi->init();
 }
 
 
@@ -36,7 +35,7 @@ void imuPublisher::init()
     rclc_publisher_init_default(&imu_publisher, node, imu_type_support, "imu/data_raw");
     rclc_publisher_init_default(&mag_publisher, node, mag_type_support, "imu/mag");
 
-    rclc_timer_init_default(&timer, support, RCL_MS_TO_NS(100), imuPublisher::imu_publish_callback);
+    rclc_timer_init_default(&timer, support, RCL_MS_TO_NS(50), imuPublisher::imu_publish_callback);
 
     rclc_executor_add_timer(exec, &timer);
 }
@@ -47,13 +46,12 @@ void imuPublisher::declareParameters(){
 
 void imuPublisher::imu_publish_callback(rcl_timer_s* time, int64_t num){
 
-    defaultPub->publishMsg();
+    if(defaultPub) defaultPub->publishMsg();
 }
+
 void imuPublisher::publishMsg() {
 
-    hwi->update();
-
-    genericImu::imuData& data = hwi->data;
+    fetchData();
 
     imu_msg.linear_acceleration = {.x = data.ax, .y = data.ay, .z = data.az};
     imu_msg.angular_velocity = {.x = data.gx, .y = data.gy, .z = data.gz};

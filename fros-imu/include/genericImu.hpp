@@ -17,8 +17,8 @@ public:
     } data;
 
 
-    virtual void init() = 0;
-    virtual void update() = 0;
+    virtual void initHwi() {};
+    virtual void fetchData() {};
 
     // virtual ~genericImu() = 0;
 
